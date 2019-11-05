@@ -1,0 +1,32 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'tools/styles/style.css' %}">
+
+<h1> Tools app - main page </h1>
+<br>
+
+<h2> Tools on stock </h2>
+{% if tools%}
+	{% for t in tools %}
+
+	<li>   <a href="{% url 'tool_det' t.name %}"> {{t.name}} - {{t.qty}} </a>
+</li>
+	{%endfor %}
+{% endif %}
+
+
+<br>
+<li> <a href="{% url 'issue'  %}"> Issue tools </a> </li>
+	<br>
+<li> <a href="{% url 'all_issues' %}"> Previous issues </a>	</li>
+
+
+<br>
+<br>
+<hr>
+<br>
+<h2> TEST </h2>
+<br>
+<br>
+
+<li> <a href="{% url 'mv' %}"> Test 1 </a>	</li>
+<li> <a href="{% url 'test2' %}"> Test 2  </a>	</li>

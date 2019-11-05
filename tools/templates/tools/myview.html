@@ -1,0 +1,29 @@
+{% load static %}
+
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="{% static 'tools/styles/style.css' %}">
+<script type="text/javascript" src="{% static 'tools/js/myview.js' %}"></script>
+
+</head>
+
+
+<body>
+
+<form method='post'>
+	{% csrf_token %}
+    <div id="forms" >
+        {{ form.as_p }}
+    </div>
+    <button id="add-another" formmethod="get" onclick="myFunction();">add another</button>
+    <button id="del-another" formmethod="get" onclick="myFunction_del();">del another</button>
+    <input  onclick="set_validate();" type="submit" />
+</form>
+
+<h1> {{e}} </h1>
+
+
+</body>
+
+</html>

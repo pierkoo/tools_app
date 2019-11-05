@@ -1,0 +1,16 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'tools/styles/style.css' %}">
+
+<h3>All issues </h3>
+
+{%if issues %}
+	{% for i in issues %}
+	{{i.id}} {{i.name}} {{i.qty}} {{i.created_on}}
+	<br>
+	{% endfor %}
+{% endif %}	
+
+
+<br>
+<br>
+<li> <a href="{% url 'on_stock' %}"> Back </a>	</li>

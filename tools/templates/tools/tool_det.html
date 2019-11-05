@@ -1,0 +1,11 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'tools/styles/style.css' %}">
+
+
+<h2> tool det </h2>
+{% if tool %}
+{{tool.name}} --- {{tool.qty}}
+{% endif %}
+<br>
+<br>
+<li> <a href="{% url 'on_stock' %}">Back to all tools</a>	</li>
