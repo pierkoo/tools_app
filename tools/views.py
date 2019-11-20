@@ -35,7 +35,9 @@ def issue(request):
                        qty=form.cleaned_data['issue_qty'])
             i.save()
 
-            return HttpResponseRedirect(reverse('thanks'))
+            #url=reverse('thanks', kwargs={'p':1})
+            url=reverse('thanks', args=(1,))
+            return HttpResponseRedirect(url)
 
 
     else:
@@ -57,8 +59,8 @@ def tool_det(request, tool_name):
     return render(request, 'tools/tool_det.html', context)
 
 def thanks(request):
-    request.GET=1
-    info=[request.GET]
+
+    info=[]
     context= {'info':info}
 
     return render(request, 'tools/thanks.html', context)
@@ -84,11 +86,47 @@ def myview(request):
         form = MyForm(request.POST,
                       extra=request.POST.get('extra_field_count'),
                       validate=True)
-        e=['POST', request.POST]
+        e=['POST', request.POST] #TEST - wyświetlanie odpowiedzi
 
         if form.is_valid():
-            e=['VALID', request.POST]
-        #return HttpResponseRedirect(reverse('thanks'))
+
+            data=form.cleaned_data
+            data.pop('extra_field_count')
+            data.pop('validate')
+            data=list(data.values())
+
+            # creating dict from data (tool name:qty) - to be rewritten
+            l=[e for e in data if type(e)==str]
+            q=[e for e in data if type(e)==int]
+
+            d={}
+            for e in :
+                d[e]=0
+            for e,e1 in zip(l,q):
+                temp=d[e]
+                d[e]=temp+e1
+
+
+            # making changes in database
+            for key in d:
+
+                q = Tools.objects.get(name=key)
+                q.qty = q.qty-d[key]
+                q.save()
+                i = Issues(name=key,
+                           qty=d[key])
+                i.save()
+
+
+
+            #return render(request, 'tools/myview.html',
+            #    { 'form': form, 'e':d})
+
+            return HttpResponseRedirect(reverse('thanks'))
+        else:
+            return render(request, 'tools/myview.html',
+                { 'form': form, 'e':e })
+
     else:
         #form = MyForm()
 
