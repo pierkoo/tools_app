@@ -1,4 +1,0 @@
-1.poprawic required w formularzu ( reset validate?)
-
-2. sprawdzenie czy wydanie nie pzekracza stany maksymalnego + message? GOTOWE
-
