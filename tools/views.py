@@ -6,6 +6,7 @@ from .models import Tools, Issues
 from .forms import issueForm, MyForm
 from django.urls import reverse
 from django.forms import formset_factory
+from django.contrib import messages
 
 def index(request):
     context = {}
@@ -85,11 +86,11 @@ def myview(request):
 
         form = MyForm(request.POST,
                       extra=request.POST.get('extra_field_count'),
-                      validate=True)
+                            validate=True)
         e=['POST', request.POST] #TEST - wyświetlanie odpowiedzi
 
         if form.is_valid():
-
+            not_valid=False
             data=form.cleaned_data
             data.pop('extra_field_count')
             data.pop('validate')
@@ -100,7 +101,7 @@ def myview(request):
             q=[e for e in data if type(e)==int]
 
             d={}
-            for e in :
+            for e in l:
                 d[e]=0
             for e,e1 in zip(l,q):
                 temp=d[e]
@@ -111,25 +112,35 @@ def myview(request):
             for key in d:
 
                 q = Tools.objects.get(name=key)
+                if q.qty < d[key]:
+                    message_text = 'Not enough ' + key + ' Only ' + \
+                                    str(q.qty)+'pcs on stock'
+                    messages.add_message(request, messages.INFO,message_text)
+                    not_valid=True
+
+            if not_valid:
+                return render(request, 'tools/myview.html',
+                    { 'form': form, 'e':d})
+
+
+            for key in d:
+
+                q = Tools.objects.get(name=key)
                 q.qty = q.qty-d[key]
                 q.save()
-                i = Issues(name=key,
-                           qty=d[key])
+                i = Issues(name=key,qty=d[key])
                 i.save()
-
-
 
             #return render(request, 'tools/myview.html',
             #    { 'form': form, 'e':d})
 
             return HttpResponseRedirect(reverse('thanks'))
+
         else:
             return render(request, 'tools/myview.html',
-                { 'form': form, 'e':e })
+                          { 'form': form, 'e':e })
 
     else:
-        #form = MyForm()
-
         form = MyForm(request.GET,
                       extra=request.GET.get('extra_field_count'),
                       validate=False)
